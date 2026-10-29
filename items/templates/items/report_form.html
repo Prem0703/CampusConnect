@@ -1,0 +1,22 @@
+{% extends 'items/base.html' %}
+{% block title %}Report an item | CampusConnect{% endblock %}
+{% block content %}
+<section class="form-page">
+    <a class="back-link" href="{% url 'home' %}">← Back to community board</a>
+    <div class="form-layout">
+        <div class="form-intro"><div class="eyebrow"><span class="eyebrow-dot"></span> EVERY CLUE COUNTS</div><h1>Let’s get this<br><span class="gradient-text">back where it belongs.</span></h1><p>Share a few details and let your campus community help. The more clues, the better!</p><div class="form-side-illustration">🧑‍🎓<span>💖</span><small>Kindness looks good on you.</small></div></div>
+        <form class="report-form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-title"><span class="form-title-icon">✎</span><div><h2>Item details</h2><p>Fields marked with * are required.</p></div></div>
+            {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+            <div class="form-field"><label for="{{ form.item_type.id_for_label }}">What are you reporting? *</label>{{ form.item_type }}{{ form.item_type.errors }}</div>
+            <div class="form-two-col"><div class="form-field"><label for="{{ form.title.id_for_label }}">Item name *</label>{{ form.title }}{{ form.title.errors }}</div><div class="form-field"><label for="{{ form.category.id_for_label }}">Category *</label>{{ form.category }}{{ form.category.errors }}</div></div>
+            <div class="form-field"><label for="{{ form.description.id_for_label }}">Description *</label>{{ form.description }}{{ form.description.errors }}</div>
+            <div class="form-two-col"><div class="form-field"><label for="{{ form.location.id_for_label }}">Where? *</label>{{ form.location }}{{ form.location.errors }}</div><div class="form-field"><label for="{{ form.report_date.id_for_label }}">Date *</label>{{ form.report_date }}{{ form.report_date.errors }}</div></div>
+            <div class="form-field"><label for="{{ form.image.id_for_label }}">Add a photo <span class="optional">(optional)</span></label>{{ form.image }}{{ form.image.errors }}<small class="field-hint">A photo can make an item easier to identify.</small></div>
+            <button class="button button-primary form-submit" type="submit">Publish report <span>→</span></button>
+            <p class="form-footnote">Made with care for your campus community 💜</p>
+        </form>
+    </div>
+</section>
+{% endblock %}

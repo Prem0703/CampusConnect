@@ -1,0 +1,13 @@
+GitHub वर upload करण्याची सोपी पद्धत (सुरक्षित)
+================================================
+
+तुझी GitHub repository आधीच तयार आहे. GitHub Desktop वापर:
+1. https://desktop.github.com/ वरून GitHub Desktop install कर.
+2. GitHub Desktop मध्ये sign in कर.
+3. File > Add Local Repository निवड आणि या ZIP मधून extract केलेला campusconnect folder निवड.
+4. Repository नसल्याचा message आला तर Create a Repository निवडून हाच folder वापर.
+5. Changes तपास: db.sqlite3, venv/, media/, .env किंवा passwords दिसत असतील तर commit करू नकोस. या starter मध्ये ते exclude केले आहेत.
+6. Summary मध्ये Initial CampusConnect upload लिही आणि Commit to main क्लिक कर.
+7. Publish repository किंवा Publish branch क्लिक कर. तुझी आधीची repository जोडायची असल्यास GitHub Desktop मधील Repository settings/remote URL तपास. चुकीच्या remote वर push करू नकोस.
+
+टीप: GitHub वर code upload केल्याने website आपोआप live होत नाही. Public website साठी hosting deployment वेगळं करावं लागेल.

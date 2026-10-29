@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/static/items/pwa/manifest.webmanifest">
+    <meta name="theme-color" content="#111827">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#7357ff">
+    <title>{% block title %}CampusConnect | Lost & Found{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'items/css/style.css' %}">
+</head>
+<body>
+    <div class="page-glow glow-one"></div>
+    <div class="page-glow glow-two"></div>
+    <header class="site-header">
+        <a class="brand" href="{% url 'home' %}">
+            <span class="brand-mark">✦</span>
+            <span>Campus<span class="brand-accent">Connect</span><small>LOST & FOUND, FOUND WITH CARE</small></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+        <nav class="nav-links">
+            <a href="{% url 'home' %}#browse">Browse items</a>
+            {% if user.is_authenticated %}
+                <a class="nav-cta" href="{% url 'report_create' %}">＋ Report an item</a>
+                <span class="nav-user">Hi, {{ user.username }}</span>
+                <form class="inline-form" method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="nav-logout" type="submit">Log out</button></form>
+            {% else %}
+                <a href="{% url 'login' %}">Log in</a>
+                <a class="nav-cta" href="{% url 'signup' %}">Join CampusConnect ↗</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    {% if messages %}
+        <div class="messages-wrap">
+            {% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}
+        </div>
+    {% endif %}
+
+    <main>{% block content %}{% endblock %}</main>
+
+    <footer class="site-footer">
+        <a class="footer-brand" href="{% url 'home' %}">✦ CampusConnect</a>
+        <span>Small acts of kindness make a campus feel like home.</span>
+        <span class="footer-sparkle">✿ ✦ ☺</span>
+        <div class="creator-credit">Created by ®_prem</div>
+    </footer>
+    <script src="{% static 'items/js/main.js' %}"></script>
+<script>if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('/static/items/pwa/sw.js').catch(() => {})); }</script>
+</body>
+</html>

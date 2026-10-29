@@ -1,0 +1,49 @@
+{% extends 'items/base.html' %}
+{% block title %}{{ report.title }} | CampusConnect{% endblock %}
+{% block content %}
+<section class="claim-page">
+  <a href="{% url 'home' %}#browse">← Back to reports</a>
+  <div class="claim-panel">
+    <div class="eyebrow">{{ report.get_item_type_display }} ITEM · {{ report.get_status_display }}</div>
+    <h1>{{ report.title }}</h1>
+    {% if report.image %}<img class="claim-photo" src="{{ report.image.url }}" alt="{{ report.title }}">{% endif %}
+    <p>{{ report.description|linebreaksbr }}</p>
+    <p class="claim-meta">📍 {{ report.location }} · {{ report.category }} · 📅 {{ report.report_date|date:'d M Y' }}</p>
+    <p class="claim-meta">Posted by {{ report.created_by.username }}</p>
+  </div>
+  {% if is_owner %}
+    <div class="claim-panel"><h2>📩 Claim requests</h2>
+      <p>Check identifying details privately before handing over an item. Never share private contact details publicly.</p>
+      {% for claim in claims %}
+        <div class="claim-panel" style="border:1px solid #e9d5ff;box-shadow:none">
+          <strong>{{ claim.claimant.username }}</strong> · {{ claim.get_status_display }}
+          <p>{{ claim.proof|linebreaksbr }}</p>
+          {% if claim.status == 'PENDING' and report.status == 'OPEN' %}
+            <div class="claim-actions">
+              <form method="post" action="{% url 'review_claim' report.pk claim.pk %}">{% csrf_token %}<input type="hidden" name="action" value="accept"><button class="button button-primary" type="submit">✓ Accept claim</button></form>
+              <form method="post" action="{% url 'review_claim' report.pk claim.pk %}">{% csrf_token %}<input type="hidden" name="action" value="reject"><button class="button button-soft" type="submit">Reject</button></form>
+            </div>
+          {% endif %}
+        </div>
+      {% empty %}<p>No claims received yet.</p>{% endfor %}
+      {% if report.status == 'CLAIMED' %}
+        <form method="post" action="{% url 'mark_returned' report.pk %}">{% csrf_token %}<button type="submit" class="button button-primary">🤝 Item returned — Mark resolved</button></form>
+      {% endif %}
+    </div>
+  {% elif user.is_authenticated %}
+    <div class="claim-panel"><h2>🔐 Is this your item?</h2>
+      {% if my_claim %}<p>Your claim status: <strong>{{ my_claim.get_status_display }}</strong></p>
+      {% elif report.status == 'OPEN' %}
+        <p>Give private identifying details only the real owner would know. The report creator can review your request.</p>
+        <form method="post" action="{% url 'claim_item' report.pk %}">{% csrf_token %}
+          <label for="proof">Proof of ownership</label><textarea id="proof" name="proof" minlength="15" maxlength="1500" required placeholder="Describe a unique mark, contents or other identifying detail..."></textarea>
+          <button class="button button-primary" type="submit">Send claim request →</button>
+        </form>
+      {% else %}<p>This item is not accepting new claims.</p>{% endif %}
+    </div>
+  {% else %}
+    <div class="claim-panel"><h2>Want to claim this item?</h2><a class="button button-primary" href="{% url 'login' %}?next={{ request.path|urlencode }}">Log in to claim →</a></div>
+  {% endif %}
+  <div class="claim-panel"><p><strong>Safe handover:</strong> Meet at a college office or other supervised campus location. Verify ownership before handing over valuables. This website does not automatically verify claims or send emails.</p></div>
+</section>
+{% endblock %}

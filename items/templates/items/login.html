@@ -1,0 +1,5 @@
+{% extends 'items/base.html' %}
+{% block title %}Log in | CampusConnect{% endblock %}
+{% block content %}
+<section class="auth-page"><div class="auth-art"><div class="auth-emoji">🔑</div><span class="auth-sparkle">✦</span><h2>Good to see you again!</h2><p>Your campus community is just one login away.</p></div><form class="auth-card" method="post">{% csrf_token %}<div class="eyebrow"><span class="eyebrow-dot"></span> WELCOME BACK</div><h1>Log <span class="gradient-text">in.</span></h1><p class="auth-subtitle">Pick up where your campus kindness left off.</p>{% if form.errors %}<div class="form-errors">Username or password is incorrect. Please try again.</div>{% endif %}<div class="form-field"><label for="{{ form.username.id_for_label }}">Username</label>{{ form.username }}</div><div class="form-field"><label for="{{ form.password.id_for_label }}">Password</label>{{ form.password }}</div><input type="hidden" name="next" value="{{ next }}"><button class="button button-primary form-submit" type="submit">Log in <span>→</span></button><p class="auth-switch">New here? <a href="{% url 'signup' %}">Create an account</a></p></form></section>
+{% endblock %}
